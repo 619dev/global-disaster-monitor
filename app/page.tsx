@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Map from '../components/Map/Map'
 import DisasterTicker from '../components/UI/DisasterTicker'
+import DisasterLog from '../components/UI/DisasterLog'
 import { getDisasterStream } from '../services/DisasterStream'
 import { DisasterEvent } from '../types/disaster'
 import { AlertTriangle, Radio } from 'lucide-react'
@@ -88,6 +89,9 @@ export default function Home() {
       <div className="flex-grow w-full relative z-0 h-screen">
         <Map events={mapEvents} />
       </div>
+
+      {/* Log Layer */}
+      <DisasterLog events={events} />
 
       {/* Ticker Layer */}
       <DisasterTicker events={tickerEvents} />
