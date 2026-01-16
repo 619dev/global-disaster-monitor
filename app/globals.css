@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  overflow: hidden; /* Prevent body scroll, map handles it */
+}
+
+.leaflet-container {
+  background: #050505 !important;
+  width: 100%;
+  height: 100%;
+}
+
+.disaster-popup .leaflet-popup-content-wrapper {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid #333;
+  color: white;
+  border-radius: 4px;
+}
+.disaster-popup .leaflet-popup-tip {
+  background: rgba(0, 0, 0, 0.8);
+}
