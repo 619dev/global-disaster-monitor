@@ -5,32 +5,30 @@ import { useEffect, useState } from 'react'
 export default function DisasterTicker({ events }: { events: DisasterEvent[] }) {
     return (
         <div className="fixed bottom-0 left-0 w-full h-12 bg-black/80 backdrop-blur-md border-t border-red-900/50 flex items-center overflow-hidden z-[1000]">
-            <div className="flex items-center absolute whitespace-nowrap animate-marquee">
-                {events.length === 0 && <span className="text-gray-500 mx-4">Connecting to Global Disaster Monitoring Network...</span>}
+            <div className="animate-marquee pl-4">
+                {events.length === 0 && <span className="text-gray-500 mx-4 font-mono">Connecting to Global Disaster Monitoring Network...</span>}
                 {events.map((ev) => (
-                    <div key={ev.id} className="inline-flex items-center mx-6">
+                    <div key={ev.id} className="inline-flex items-center mx-8">
                         <span className={`w-2 h-2 rounded-full mr-2 ${getEventColorClass(ev.type)} animate-pulse`}></span>
-                        <span className="text-red-50 font-mono text-sm">
-                            <span className="font-bold text-red-400">[{ev.type.toUpperCase()}]</span> {ev.title} @ {ev.location} - {new Date(ev.time).toLocaleTimeString()}
-                        </span>
-                    </div>
-                ))}
-                {/* Duplicate for seamless loop if needed, but CSS marquee usually needs double content or resets */}
-                {events.length > 0 && events.map((ev) => (
-                    <div key={`${ev.id}-dup`} className="inline-flex items-center mx-6">
-                        <span className={`w-2 h-2 rounded-full mr-2 ${getEventColorClass(ev.type)} animate-pulse`}></span>
-                        <span className="text-red-50 font-mono text-sm">
-                            <span className="font-bold text-red-400">[{ev.type.toUpperCase()}]</span> {ev.title} @ {ev.location} - {new Date(ev.time).toLocaleTimeString()}
+                        <span className="text-red-50 font-mono text-sm shadow-black drop-shadow-md">
+                            <span className="font-bold text-red-400">[{ev.type.toUpperCase()}]</span> {ev.title} <span className="text-gray-400">@</span> {ev.location} <span className="text-gray-500 text-xs">({new Date(ev.time).toLocaleTimeString()})</span>
                         </span>
                     </div>
                 ))}
             </div>
             <style jsx>{`
         .animate-marquee {
-          animation: marquee 40s linear infinite;
+          display: flex;
+          position: absolute;
+          white-space: nowrap;
+          will-change: transform;
+          animation: marquee 60s linear infinite;
+        }
+        .animate-marquee:hover {
+          animation-play-state: paused;
         }
         @keyframes marquee {
-          0% { transform: translateX(100%); }
+          0% { transform: translateX(100vw); }
           100% { transform: translateX(-100%); }
         }
       `}</style>

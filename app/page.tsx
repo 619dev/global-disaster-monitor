@@ -30,6 +30,27 @@ export default function Home() {
     };
   }, []);
 
+  // Update "now" every minute to refresh the 12h filter
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Filter events for map: Only show events from last 12 hours
+  const mapEvents = events
+    .filter(ev => {
+      const eventTime = new Date(ev.time).getTime();
+      return (now - eventTime) < 12 * 60 * 60 * 1000;
+    })
+    .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+
+  // Ticker gets recent 20 events, regardless of age (or maybe same filter?)
+  // Let's keep ticker showing what the map shows, or just latest 20.
+  const tickerEvents = events
+    .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
+    .slice(0, 20);
+
   return (
     <main className="flex min-h-screen flex-col bg-black text-white relative overflow-hidden">
       {/* Header Overlay */}
@@ -55,12 +76,12 @@ export default function Home() {
       </div>
 
       {/* Map Layer */}
-      <div className="flex-grow relative z-0">
-        <Map events={events} />
+      <div className="flex-grow w-full relative z-0 h-screen">
+        <Map events={mapEvents} />
       </div>
 
       {/* Ticker Layer */}
-      <DisasterTicker events={events} />
+      <DisasterTicker events={tickerEvents} />
 
       {/* Scanlines Effect */}
       <div className="absolute inset-0 pointer-events-none z-[999] opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>

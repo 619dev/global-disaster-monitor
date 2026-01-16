@@ -37,8 +37,9 @@ export default function MapInner({ events }: MapProps) {
             attributionControl={false}
         >
             <TileLayer
-                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-                attribution='&copy; CARTO'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; OSM'
+                className="brightness-50 invert hue-rotate-180"
             />
 
             {events.map((ev) => (

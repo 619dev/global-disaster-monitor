@@ -9,6 +9,64 @@ class DisasterStreamService {
 
     constructor() {
         this.connectAll();
+        // Fetch history immediately
+        this.fetchHistory();
+        // Refresh history every 5 minutes
+        setInterval(() => this.fetchHistory(), 5 * 60 * 1000);
+    }
+
+    public async fetchHistory() {
+        console.log('[DisasterStream] Fetching history...');
+        try {
+            // Fetch JMA Earthquake List
+            const jmaResponse = await fetch('https://api.wolfx.jp/jma_eqlist.json');
+            if (jmaResponse.ok) {
+                const jmaData = await jmaResponse.json();
+                // Wolfx API often returns an object map { "No1": {...}, "No2": {...} }
+                Object.values(jmaData).forEach((item: any) => {
+                    // Check structure
+                    if (!item.Hypocenter) return;
+                    this.emit({
+                        id: `wolfx-jma-hist-${item.Head?.EventID || Date.now()}-${Math.random()}`,
+                        type: 'earthquake',
+                        title: item.Control?.Title || 'Earthquake Information (JMA)',
+                        location: item.Hypocenter?.Name || 'Japan Region',
+                        latitude: parseFloat(item.Hypocenter?.Latitude || '0'),
+                        longitude: parseFloat(item.Hypocenter?.Longitude || '0'),
+                        magnitude: parseFloat(item.Hypocenter?.Magnitude || '0'),
+                        depth: parseInt(item.Hypocenter?.Depth || '0'),
+                        time: item.Head?.ReportDateTime || new Date().toISOString(),
+                        source: 'Wolfx (JMA History)',
+                        description: `M${item.Hypocenter?.Magnitude} - ${item.Head?.Headline?.Text || ''}`
+                    });
+                });
+            }
+
+            // Fetch CENC Earthquake List
+            const cencResponse = await fetch('https://api.wolfx.jp/cenc_eqlist.json');
+            if (cencResponse.ok) {
+                const cencData = await cencResponse.json();
+                // Similar structure or flat list? usually object map for wolfx
+                Object.values(cencData).forEach((item: any) => {
+                    if (!item.location) return;
+                    this.emit({
+                        id: `wolfx-cenc-hist-${item.id || Date.now()}-${Math.random()}`,
+                        type: 'earthquake',
+                        title: 'Earthquake Information (CENC)',
+                        location: item.location || 'China Region',
+                        latitude: parseFloat(item.latitude || '0'),
+                        longitude: parseFloat(item.longitude || '0'),
+                        magnitude: parseFloat(item.magnitude || '0'),
+                        depth: parseInt(item.depth || '0'),
+                        time: item.time || new Date().toISOString(),
+                        source: 'Wolfx (CENC History)',
+                        description: `M${item.magnitude} - ${item.location}`
+                    });
+                });
+            }
+        } catch (e) {
+            console.error('[DisasterStream] Failed to fetch history', e);
+        }
     }
 
     public on(callback: DisasterCallback) {
