@@ -54,22 +54,31 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col bg-black text-white relative overflow-hidden">
       {/* Header Overlay */}
-      <div className="absolute top-0 left-0 w-full z-[1000] pointer-events-none p-4 bg-gradient-to-b from-black/80 to-transparent">
-        <div className="flex justify-between items-start">
-          <div>
-            <h1 className="text-2xl font-black tracking-widest text-red-500 font-mono flex items-center gap-2">
-              <AlertTriangle className="w-6 h-6 animate-pulse" />
-              GLOBAL DISASTER MONITOR
-            </h1>
-            <p className="text-xs text-red-400/70 font-mono mt-1">REAL-TIME SURVEILLANCE SYSTEM // ASTRBOT-PLUGIN REF</p>
+      {/* Header Overlay */}
+      <div className="absolute top-0 left-0 w-full z-[1000] pointer-events-none p-4 bg-gradient-to-b from-black/90 to-transparent">
+        {/* Top Bar Container */}
+        <div className="flex justify-between items-start relative">
+
+          {/* Left Status (moved from right or kept here if needed, but keeping simple) */}
+          <div className="flex flex-col items-start font-mono text-xs text-slate-500">
+            <div>LAT: {0.00}</div>
+            <div>LONG: {0.00}</div>
           </div>
+
+          {/* Center Title */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
+            <h1 className="text-3xl font-black tracking-widest text-red-500 font-sans flex items-center justify-center gap-2 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+              <AlertTriangle className="w-8 h-8 animate-pulse" />
+              全球灾害预警系统
+            </h1>
+            <p className="text-xs text-red-400/70 font-mono mt-1 tracking-wider uppercase">Global Disaster Warning System</p>
+          </div>
+
+          {/* Right Status */}
           <div className="flex flex-col items-end">
             <div className="flex items-center gap-2 font-mono text-xs">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
               <span className="text-green-400">SYSTEM STATUS: {status}</span>
-            </div>
-            <div className="text-xs text-slate-500 font-mono mt-1">
-              LAT: {0.00} LONG: {0.00}
             </div>
           </div>
         </div>
