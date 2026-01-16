@@ -55,7 +55,7 @@ export default function MapInner({ events }: MapProps) {
                     radius={Math.max(5, (ev.magnitude || 0) * 2)} // Start simple
                 >
                     <Popup className="disaster-popup">
-                        <div className="font-mono text-slate-900">
+                        <div className="font-mono text-slate-100">
                             <h3 className="font-bold text-sm border-b border-slate-300 pb-1 mb-1">{ev.title}</h3>
                             <p className="text-xs">{ev.time}</p>
                             <p className="text-xs">Mag: {ev.magnitude}</p>
